@@ -271,3 +271,45 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 // ...
+```
+
+### Controladores
+
+Los controladores son funciones que se encargan de manejar la lógica de la aplicación.
+
+Por ejemplo, si tenemos un endpoint para obtener un producto por su id, entonces el controlador debería ser capaz de obtener ese producto de la base de datos.
+
+```js
+const promiseQuery = require('../config/db')
+
+// Controlador de productos
+
+const obtenerTodos = async (req, res) => {
+  // Obtiene todos los usuarios de la base de datos
+  try {
+    const query = "SELECT * FROM productos";
+
+    const productos =  await promiseQuery(query)
+    res.json(productos)
+  } catch (error) {
+    throw err
+  }
+}
+
+module.exports = {
+  obtenerTodos
+}
+```
+
+De esta manera, separamos la logica de la dirección, quedandonos las rutas de la siguiente manera
+
+
+```js
+const express = require('express');
+const router = express.Router();
+const productosController = require('../controladores/productosController')
+
+router.get('/', productosController.obtenerTodos)
+
+module.exports = router
+```
