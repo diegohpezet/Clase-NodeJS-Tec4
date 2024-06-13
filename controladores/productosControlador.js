@@ -8,6 +8,8 @@ const obtenerTodos = async (req, res) => {
     const query = "SELECT * FROM productos";
 
     const productos =  await promiseQuery(query)
+    // const productos = await Productos.findAll()
+    
     res.json(productos)
   } catch (error) {
     throw err
