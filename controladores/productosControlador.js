@@ -48,7 +48,7 @@ const crear = async (req, res) => {
 
     return res.status(200).json({
       message: "Producto creado!",
-      //data: productoNuevo
+      data: productoNuevo
     })
 
   } catch (error) {
@@ -85,12 +85,4 @@ module.exports = {
   crear,
   actualizar,
   borrar
-}
-
-
-
-
-const usuario = {
-  nombre: "Diego",
-  email: "diegohpezet@gmail.com"
 }
