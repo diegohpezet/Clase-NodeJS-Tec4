@@ -1,10 +1,15 @@
 const { Sequelize } = require('sequelize');
 
 // Connectar a DB
-const database = new Sequelize('explicacionpdi', 'root', 'root', {
-  host: '127.0.0.1',
-  dialect: 'mysql'
-});
+const database = new Sequelize(
+  'explicacionpdi', 
+  'root', 
+  'root', 
+  {
+    host: '127.0.0.1',
+    dialect: 'mysql'
+  }
+);
 
 // Testeamos conexión
 (async () => {

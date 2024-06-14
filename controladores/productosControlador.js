@@ -1,42 +1,58 @@
 const promiseQuery = require('../config/db')
 
+// Importamos modelo de Producto
+const Producto = require('../models/Producto')
+
 // Controlador de productos
 
 const obtenerTodos = async (req, res) => {
   // Obtiene todos los usuarios de la base de datos
   try {
-    const query = "SELECT * FROM productos";
-
-    const productos =  await promiseQuery(query)
-    // const productos = await Productos.findAll()
-    
-    res.json(productos)
+    const productos = await Producto.findAll()
+    return res.json(productos)
   } catch (error) {
-    throw err
+    return res.json({err: error})
   }
 }
 
 const obtener = async (req, res) => {
   try {
-    const id = req.params.id
-    const query = "SELECT * FROM productos WHERE id = ?"
+    const { nombre } = req.params
+    const producto = await Producto.findByPk(nombre)
   
-    const producto = await promiseQuery(query, [id])
-    res.json(producto) 
+    return res.status(200).json(producto) 
   } catch (error) {
-    throw err
+    return res.status(500).json({error: "Internal Server Error"})
   }
 }
 
 const crear = async (req, res) => {
   try {
     const { nombre, precio, stock } = req.body
-    const query = "INSERT INTO productos (nombre, precio, stock) VALUES (?, ?, ?)"
 
-    await promiseQuery(query, [nombre, precio, stock])
-    res.json({message: "Producto creado!!!"})
+    // Validaciones
+    if (!nombre || nombre.length < 3) {
+      return res.status(401).json({error: "Nombre inválido"})
+    }
+    if (!precio || isNaN(precio)) {
+      return res.status(401).json({error: "Precio inválido"})
+    }
+    if (isNaN(stock)) {
+      return res.status(401).json({error: "Stock inválido"})
+    }
+
+    const productoNuevo = await Producto.create({ 
+      nombre: nombre, precio: precio, stock: stock 
+    });
+    productoNuevo.save();
+
+    return res.status(200).json({
+      message: "Producto creado!",
+      //data: productoNuevo
+    })
+
   } catch (error) {
-    throw error
+    return res.status(500).json({error: "Internal Server Error"})
   }
 }
 
@@ -69,4 +85,12 @@ module.exports = {
   crear,
   actualizar,
   borrar
+}
+
+
+
+
+const usuario = {
+  nombre: "Diego",
+  email: "diegohpezet@gmail.com"
 }
